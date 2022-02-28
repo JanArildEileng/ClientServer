@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 namespace CSConsoleclient.InfoTest;
 
@@ -10,10 +11,10 @@ public class InfoTester {
      
       static JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
 
-     public static async Task GetFromJsonAsync(HttpClient client) {
+     public static async Task GetFromJsonAsync(HttpClient client,ILogger logger) {
         var info=await client.GetFromJsonAsync<CSShared.Dto.InfoData> (path);
         var options = new JsonSerializerOptions { WriteIndented = true };
-         Console.WriteLine($"InfoTester:GetFromJsonAsync  from server {path}:: { JsonSerializer.Serialize(info,options)}");   
+         logger.LogInformation($"InfoTester:GetFromJsonAsync  from server {path}:: { JsonSerializer.Serialize(info,options)}");   
      }
 
     public static async Task ReadFromJsonAsync(HttpClient client) {

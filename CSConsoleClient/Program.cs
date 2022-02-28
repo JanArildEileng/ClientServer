@@ -2,23 +2,39 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using CSConsoleclient.InfoTest;
+using Serilog;
+using Serilog.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
-Console.WriteLine("Hello, Client!");
+
+
+var serilogLogger= new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .CreateLogger();
+
+Microsoft.Extensions.Logging.ILogger logger= new SerilogLoggerFactory(serilogLogger).CreateLogger("cat1"); 
+
+
+logger.LogInformation("Hello, Client!");
 
 HttpClient client=new HttpClient();
 client.BaseAddress=new Uri("https://localhost:7076");
 
 string response=await client.GetStringAsync("/");
-Console.WriteLine($" Reponse from server /: {response}");
+logger.LogInformation($" Reponse from server /: {response}");
 
-await InfoTester.GetFromJsonAsync(client);
+await InfoTester.GetFromJsonAsync(client,logger);
 await InfoTester.ReadFromJsonAsync(client);
 await InfoTester.InvalidPathGetFromJsonAsync(client);
 
 try {
     await InfoTester.InvalidServerReadFromJsonAsync();
 } catch (Exception ex) {
-    Console.WriteLine($"InvalidServerReadFromJsonAsync  ex={ex.Message}");
+    logger.LogError($"InvalidServerReadFromJsonAsync  ex={ex.Message}");
 }
 
-Console.WriteLine("Goodbye!");
+
+logger.LogInformation("Goodbye!");
+
+
