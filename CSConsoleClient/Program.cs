@@ -11,7 +11,14 @@ client.BaseAddress=new Uri("https://localhost:7076");
 
 string response=await client.GetStringAsync("/");
 
-Console.WriteLine($" Reponse from server: {response}");
+Console.WriteLine($" Reponse from server /: {response}");
+
+
+
+var info=await client.GetFromJsonAsync<CSShared.Dto.InfoData> ("/Info");
+
+Console.WriteLine($" Reponse from server (Info): {info}");
+
 
 
 
