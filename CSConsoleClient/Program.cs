@@ -1,5 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Net.Http.Json;
+using System.Text.Json;
+
 
 Console.WriteLine("Hello, Client!");
 
@@ -15,9 +17,13 @@ Console.WriteLine($" Reponse from server /: {response}");
 
 
 
+
 var info=await client.GetFromJsonAsync<CSShared.Dto.InfoData> ("/Info");
 
-Console.WriteLine($" Reponse from server (Info): {info}");
+var options = new JsonSerializerOptions { WriteIndented = true };
+
+
+Console.WriteLine($" Reponse from server (Info): { JsonSerializer.Serialize(info,options)}");
 
 
 

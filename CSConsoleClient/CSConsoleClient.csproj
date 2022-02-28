@@ -12,7 +12,7 @@
  
 
   <ItemGroup>
-    <PackageReference Include="CSShared" Version="1.0.1" />
+    <PackageReference Include="CSShared" Version="1.0.2" />
   </ItemGroup>
 
 </Project>
