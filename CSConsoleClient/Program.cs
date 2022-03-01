@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using CSConsoleclient.InfoTest;
 using Serilog;
-using Serilog.Extensions.Logging;
+//using Serilog.Extensions.Logging;
 using Microsoft.Extensions.Logging;
 
 
@@ -13,8 +13,17 @@ var serilogLogger= new LoggerConfiguration()
                 .WriteTo.Console()
                 .CreateLogger();
 
-Microsoft.Extensions.Logging.ILogger logger= new SerilogLoggerFactory(serilogLogger).CreateLogger("cat1"); 
 
+//Microsoft.Extensions.Logging.ILogger logger= new SerilogLoggerFactory(serilogLogger).CreateLogger("cat1"); 
+ var loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder
+              .AddConsole()
+              .AddSerilog(serilogLogger);
+        });
+ //Microsoft.Extensions.Logging.ILogger logger = loggerFactory.CreateLogger<Program>();
+  Microsoft.Extensions.Logging.ILogger logger = loggerFactory.CreateLogger("CS");
+ logger.LogInformation("Example log message");
 
 logger.LogInformation("Hello, Client!");
 
@@ -34,7 +43,18 @@ try {
     logger.LogError($"InvalidServerReadFromJsonAsync  ex={ex.Message}");
 }
 
+GoodByeClass goodByeClass=new GoodByeClass(loggerFactory.CreateLogger<GoodByeClass>() );
 
-logger.LogInformation("Goodbye!");
+
+//logger.LogInformation("Goodbye!");
 
 
+public class GoodByeClass {
+
+   string message="Good Bye";
+
+   public GoodByeClass(Microsoft.Extensions.Logging.ILogger<GoodByeClass> logger)
+   {
+       logger.LogInformation(message);
+   }   
+}
